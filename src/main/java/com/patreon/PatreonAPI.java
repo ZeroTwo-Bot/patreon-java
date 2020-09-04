@@ -109,7 +109,7 @@ public class PatreonAPI {
             addFieldsParam(pathBuilder, User.class, optionalAndDefaultFields);
         }
 
-        if (optionalFields != null) {
+        if (optionalPledgeFields != null) {
             Set<Pledge.PledgeField> optionalAndDefaultFields = new HashSet<>(optionalPledgeFields);
             optionalAndDefaultFields.addAll(Pledge.PledgeField.getDefaultFields());
             addFieldsParam(pathBuilder, Pledge.class, optionalAndDefaultFields);
