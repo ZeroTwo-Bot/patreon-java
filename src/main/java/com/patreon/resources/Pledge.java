@@ -21,7 +21,8 @@ public class Pledge extends BaseResource {
     private final int pledgeCapCents;
     //Optional properties.  Will be null if not requested
     private final Integer totalHistoricalAmountCents;
-    private final Boolean isPaused;
+    private final Boolean isPaused; // default!
+    private final String status; // default!
     private final Boolean hasShippingAddress;
     @Relationship("creator")
     private final User creator;
@@ -39,6 +40,7 @@ public class Pledge extends BaseResource {
             @JsonProperty("pledge_cap_cents") int pledge_cap_cents,
             @JsonProperty("total_historical_amount_cents") Integer total_historical_amount_cents,
             @JsonProperty("is_paused") Boolean is_paused,
+            @JsonProperty("status") String status,
             @JsonProperty("has_shipping_address") Boolean has_shipping_address,
             @JsonProperty("creator") User creator,
             @JsonProperty("patron") User patron,
@@ -52,6 +54,7 @@ public class Pledge extends BaseResource {
         this.pledgeCapCents = pledge_cap_cents;
         this.totalHistoricalAmountCents = total_historical_amount_cents;
         this.isPaused = is_paused;
+        this.status = status;
         this.hasShippingAddress = has_shipping_address;
         this.creator = creator;
         this.patron = patron;
@@ -97,6 +100,10 @@ public class Pledge extends BaseResource {
         return isPaused;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
     /**
      * @return Whether this patron has a shipping address, or null if this field wasn't requested
      */
@@ -124,7 +131,8 @@ public class Pledge extends BaseResource {
         PatronPaysFees("patron_pays_fees", true),
         PledgeCapCents("pledge_cap_cents", true),
         TotalHistoricalAmountCents("total_historical_amount_cents", false),
-        IsPaused("is_paused", false),
+        IsPaused("is_paused", true),
+        Status("status", true),
         HasShippingAddress("has_shipping_address", false),
         ;
 
