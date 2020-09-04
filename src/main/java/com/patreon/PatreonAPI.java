@@ -98,6 +98,29 @@ public class PatreonAPI {
         );
     }
 
+    public JSONAPIDocument<User> fetchUser(Collection<User.UserField> optionalFields,
+                                           Collection<Pledge.PledgeField> optionalPledgeFields) throws IOException {
+        URIBuilder pathBuilder = new URIBuilder()
+                .setPath("current_user")
+                .addParameter("include", "pledges");
+        if (optionalFields != null) {
+            Set<User.UserField> optionalAndDefaultFields = new HashSet<>(optionalFields);
+            optionalAndDefaultFields.addAll(User.UserField.getDefaultFields());
+            addFieldsParam(pathBuilder, User.class, optionalAndDefaultFields);
+        }
+
+        if (optionalFields != null) {
+            Set<Pledge.PledgeField> optionalAndDefaultFields = new HashSet<>(optionalPledgeFields);
+            optionalAndDefaultFields.addAll(Pledge.PledgeField.getDefaultFields());
+            addFieldsParam(pathBuilder, Pledge.class, optionalAndDefaultFields);
+        }
+
+        return converter.readDocument(
+                getDataStream(pathBuilder.toString()),
+                User.class
+        );
+    }
+
     private InputStream getDataStream(String suffix) throws IOException {
         return this.requestUtil.request(suffix, this.accessToken);
     }
@@ -110,7 +133,8 @@ public class PatreonAPI {
      * @param fields A list of fields to include.  Only fields in this list will be retrieved in the query
      * @return builder
      */
-    private URIBuilder addFieldsParam(URIBuilder builder, Class<? extends BaseResource> type, Collection<? extends Field> fields) {
+    private URIBuilder addFieldsParam(URIBuilder builder, Class<? extends BaseResource> type, Collection<?
+            extends Field> fields) {
         List<String> fieldNames = new ArrayList<>();
         for (Field f : fields) {
             fieldNames.add(f.getPropertyName());
