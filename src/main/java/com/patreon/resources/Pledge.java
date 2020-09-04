@@ -6,146 +6,147 @@ import com.github.jasminb.jsonapi.annotations.Type;
 import com.patreon.resources.shared.BaseResource;
 import com.patreon.resources.shared.Field;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Type("pledge")
 public class Pledge extends BaseResource {
-  
-  public enum PledgeField implements Field {
-    AmountCents("amount_cents", true),
-    CreatedAt("created_at", true),
-    DeclinedSince("declined_since", true),
-    PatronPaysFees("patron_pays_fees", true),
-    PledgeCapCents("pledge_cap_cents", true),
-    TotalHistoricalAmountCents("total_historical_amount_cents", false),
-    IsPaused("is_paused", false),
-    HasShippingAddress("has_shipping_address", false),
-    ;
 
-    private final String propertyName;
-    private final boolean isDefault;
+    private final int amountCents;
+    private final String createdAt;
+    private final String currency;
+    private final String declinedSince;
+    private final boolean patronPaysFees;
+    private final int pledgeCapCents;
+    //Optional properties.  Will be null if not requested
+    private final Integer totalHistoricalAmountCents;
+    private final Boolean isPaused;
+    private final Boolean hasShippingAddress;
+    @Relationship("creator")
+    private final User creator;
+    @Relationship("patron")
+    private final User patron;
+    @Relationship("reward")
+    private final Reward reward;
 
-    PledgeField(String propertyName, boolean isDefault) {
-      this.propertyName = propertyName;
-      this.isDefault = isDefault;
+    public Pledge(
+            @JsonProperty("amount_cents") int amount_cents,
+            @JsonProperty("created_at") String created_at,
+            @JsonProperty("currency") String currency,
+            @JsonProperty("declined_since") String declined_since,
+            @JsonProperty("patron_pays_fees") boolean patron_pays_fees,
+            @JsonProperty("pledge_cap_cents") int pledge_cap_cents,
+            @JsonProperty("total_historical_amount_cents") Integer total_historical_amount_cents,
+            @JsonProperty("is_paused") Boolean is_paused,
+            @JsonProperty("has_shipping_address") Boolean has_shipping_address,
+            @JsonProperty("creator") User creator,
+            @JsonProperty("patron") User patron,
+            @JsonProperty("reward") Reward reward
+    ) {
+        this.amountCents = amount_cents;
+        this.createdAt = created_at;
+        this.currency = currency;
+        this.declinedSince = declined_since;
+        this.patronPaysFees = patron_pays_fees;
+        this.pledgeCapCents = pledge_cap_cents;
+        this.totalHistoricalAmountCents = total_historical_amount_cents;
+        this.isPaused = is_paused;
+        this.hasShippingAddress = has_shipping_address;
+        this.creator = creator;
+        this.patron = patron;
+        this.reward = reward;
     }
 
-    public static Collection<PledgeField> getDefaultFields() {
-      return Arrays.stream(values()).filter(Field::isDefault).collect(Collectors.toList());
+    public int getAmountCents() {
+        return amountCents;
     }
 
-    @Override
-    public String getPropertyName() {
-      return this.propertyName;
+    public String getCreatedAt() {
+        return createdAt;
     }
 
-    @Override
-    public boolean isDefault() {
-      return this.isDefault;
+    public String getCurrency() {
+        return currency;
     }
-  }
 
-  private int amountCents;
-  private String createdAt;
-  private String declinedSince;
-  private boolean patronPaysFees;
-  private int pledgeCapCents;
+    public String getDeclinedSince() {
+        return declinedSince;
+    }
 
-  //Optional properties.  Will be null if not requested
-  private Integer totalHistoricalAmountCents;
-  private Boolean isPaused;
-  private Boolean hasShippingAddress;
+    public boolean getPatronPaysFees() {
+        return patronPaysFees;
+    }
 
-  @Relationship("creator")
-  private User creator;
+    public int getPledgeCapCents() {
+        return pledgeCapCents;
+    }
 
-  @Relationship("patron")
-  private User patron;
+    /**
+     * @return The lifetime value this patron has paid to the campaign, or null
+     * if this field was not requested
+     */
+    public Integer getTotalHistoricalAmountCents() {
+        return totalHistoricalAmountCents;
+    }
 
-  @Relationship("reward")
-  private Reward reward;
+    /**
+     * @return Whether the pledge is paused, or null if this field wasn't requested.
+     */
+    public Boolean getPaused() {
+        return isPaused;
+    }
 
-  public Pledge(
-                 @JsonProperty("amount_cents") int amount_cents,
-                 @JsonProperty("created_at") String created_at,
-                 @JsonProperty("declined_since") String declined_since,
-                 @JsonProperty("patron_pays_fees") boolean patron_pays_fees,
-                 @JsonProperty("pledge_cap_cents") int pledge_cap_cents,
-                 @JsonProperty("total_historical_amount_cents") Integer total_historical_amount_cents,
-                 @JsonProperty("is_paused") Boolean is_paused,
-                 @JsonProperty("has_shipping_address") Boolean has_shipping_address,
-                 @JsonProperty("creator") User creator,
-                 @JsonProperty("patron") User patron,
-                 @JsonProperty("reward") Reward reward
-  ) {
-    this.amountCents = amount_cents;
-    this.createdAt = created_at;
-    this.declinedSince = declined_since;
-    this.patronPaysFees = patron_pays_fees;
-    this.pledgeCapCents = pledge_cap_cents;
-    this.totalHistoricalAmountCents = total_historical_amount_cents;
-    this.isPaused = is_paused;
-    this.hasShippingAddress = has_shipping_address;
-    this.creator = creator;
-    this.patron = patron;
-    this.reward = reward;
-  }
+    /**
+     * @return Whether this patron has a shipping address, or null if this field wasn't requested
+     */
+    public Boolean getHasShippingAddress() {
+        return hasShippingAddress;
+    }
 
-  public int getAmountCents() {
-    return amountCents;
-  }
+    public User getCreator() {
+        return creator;
+    }
 
-  public String getCreatedAt() {
-    return createdAt;
-  }
+    public User getPatron() {
+        return patron;
+    }
 
-  public String getDeclinedSince() {
-    return declinedSince;
-  }
+    public Reward getReward() {
+        return reward;
+    }
 
-  public boolean getPatronPaysFees() {
-    return patronPaysFees;
-  }
+    public enum PledgeField implements Field {
+        AmountCents("amount_cents", true),
+        CreatedAt("created_at", true),
+        DeclinedSince("declined_since", true),
+        PatronPaysFees("patron_pays_fees", true),
+        PledgeCapCents("pledge_cap_cents", true),
+        TotalHistoricalAmountCents("total_historical_amount_cents", false),
+        IsPaused("is_paused", false),
+        HasShippingAddress("has_shipping_address", false),
+        ;
 
-  public int getPledgeCapCents() {
-    return pledgeCapCents;
-  }
+        private final String propertyName;
+        private final boolean isDefault;
 
-  /**
-   * @return The lifetime value this patron has paid to the campaign, or null
-   * if this field was not requested
-   */
-  public Integer getTotalHistoricalAmountCents() {
-    return totalHistoricalAmountCents;
-  }
+        PledgeField(String propertyName, boolean isDefault) {
+            this.propertyName = propertyName;
+            this.isDefault = isDefault;
+        }
 
-  /**
-   * @return Whether the pledge is paused, or null if this field wasn't requested.
-   */
-  public Boolean getPaused() {
-    return isPaused;
-  }
+        public static Collection<PledgeField> getDefaultFields() {
+            return Arrays.stream(values()).filter(Field::isDefault).collect(Collectors.toList());
+        }
 
-  /**
-   * @return Whether this patron has a shipping address, or null if this field wasn't requested
-   */
-  public Boolean getHasShippingAddress() {
-    return hasShippingAddress;
-  }
+        @Override
+        public String getPropertyName() {
+            return this.propertyName;
+        }
 
-  public User getCreator() {
-    return creator;
-  }
-
-  public User getPatron() {
-    return patron;
-  }
-
-  public Reward getReward() {
-    return reward;
-  }
+        @Override
+        public boolean isDefault() {
+            return this.isDefault;
+        }
+    }
 }
