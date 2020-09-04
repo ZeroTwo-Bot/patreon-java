@@ -119,6 +119,7 @@ public class Pledge extends BaseResource {
     public enum PledgeField implements Field {
         AmountCents("amount_cents", true),
         CreatedAt("created_at", true),
+        Currency("currency", true),
         DeclinedSince("declined_since", true),
         PatronPaysFees("patron_pays_fees", true),
         PledgeCapCents("pledge_cap_cents", true),

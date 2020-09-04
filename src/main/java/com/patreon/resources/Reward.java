@@ -143,7 +143,6 @@ public class Reward extends BaseResource {
     public enum RewardField implements Field {
         AmountCents("amount_cents", true),
         CreatedAt("created_at", true),
-        Currency("currency", true),
         Description("description", true),
         Remaining("remaining", true),
         RequiresShipping("requires_shipping", true),
