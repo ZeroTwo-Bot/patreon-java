@@ -21,8 +21,8 @@ public class Pledge extends BaseResource {
     private final int pledgeCapCents;
     //Optional properties.  Will be null if not requested
     private final Integer totalHistoricalAmountCents;
-    private final Boolean isPaused; // default!
-    private final String status; // default!
+    private final Boolean isPaused;
+    private final String status;
     private final Boolean hasShippingAddress;
     @Relationship("creator")
     private final User creator;
@@ -131,8 +131,8 @@ public class Pledge extends BaseResource {
         PatronPaysFees("patron_pays_fees", true),
         PledgeCapCents("pledge_cap_cents", true),
         TotalHistoricalAmountCents("total_historical_amount_cents", false),
-        IsPaused("is_paused", true),
-        Status("status", true),
+        IsPaused("is_paused", false),
+        Status("status", false),
         HasShippingAddress("has_shipping_address", false),
         ;
 
